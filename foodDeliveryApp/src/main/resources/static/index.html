@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodieApp - 3D Experience</title>
+    <style>
+        /* --- General 3D Setup --- */
+        body {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #2c3e50 0%, #000000 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+            perspective: 1500px;
+        }
+
+        /* Animated 3D Particles Background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            background-image:
+                    radial-gradient(#fff, rgba(255,255,255,0.2) 2px, transparent 40px),
+                    radial-gradient(#fff, rgba(255,255,255,0.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px;
+            animation: move-particles 100s linear infinite;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        @keyframes move-particles {
+            from { background-position: 0 0, 40px 60px; }
+            to { background-position: -5000px 10000px, -2000px 5000px; }
+        }
+
+        /* --- Glassmorphism and 3D Containers --- */
+        .glass-container {
+            display: none;
+            max-width: 450px;
+            margin: 12vh auto; /* Center alignment */
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transform: rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .active { display: block; animation: float-in 0.8s ease-out; }
+
+        @keyframes float-in {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- Food Menu Section Fixes --- */
+        #foodSection.glass-container {
+            max-width: 1100px;
+            margin: 5vh auto;
+            padding: 60px 30px; /* Padding for internal breathing space */
+            background: rgba(255, 255, 255, 0.02);
+            display: none; /* Reset for JS */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            position: relative;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+
+        #foodSection.active { display: grid; }
+
+        #menuTitle {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 3em;
+            color: white;
+            margin-bottom: 50px; /* Gap below title */
+            margin-top: 20px;    /* Gap from top */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: translateZ(60px);
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* --- Food Card 3D Styling --- */
+        .food-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+        }
+
+        .food-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .food-card h3 { font-size: 1.8em; transform: translateZ(40px); margin-bottom: 10px; }
+        .food-card p.description { color: #ccc; transform: translateZ(30px); }
+        .price-tag { color: #2ecc71; font-size: 1.6em; font-weight: bold; transform: translateZ(50px); margin: 20px 0; }
+
+        /* --- Buttons & Inputs --- */
+        input {
+            width: 90%; padding: 15px; margin: 10px 0; border-radius: 12px;
+            border: none; background: rgba(255,255,255,0.1); color: white;
+        }
+
+        .btn {
+            width: 100%; padding: 18px; cursor: pointer; border-radius: 12px;
+            border: none; color: white; font-weight: bold; text-transform: uppercase;
+            transition: 0.3s; transform: translateZ(20px);
+        }
+
+        .login-btn { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .reg-btn { background: linear-gradient(135deg, #28a745, #1e7e34); }
+
+        .order-now-btn {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: black; padding: 15px; font-weight: bold; border-radius: 10px;
+            border: none; cursor: pointer; width: 100%; transform: translateZ(30px);
+        }
+
+        .logout-btn {
+            position: absolute; top: 20px; right: 30px;
+            background: #dc3545; color: white; border: none;
+            padding: 10px 20px; border-radius: 8px; cursor: pointer;
+            z-index: 100;
+        }
+
+        .quantity-controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .qty-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+
+        nav { text-align: center; padding: 20px; }
+        nav button { background: none; border: 1px solid #555; color: white; padding: 10px 25px; border-radius: 25px; cursor: pointer; margin: 0 10px; }
+
+    </style>
+</head>
+<body>
+
+<nav id="navBar">
+    <button onclick="showSection('loginSection')">Login</button>
+    <button onclick="showSection('registerSection')">Register</button>
+</nav>
+
+<div id="registerSection" class="glass-container">
+    <h2>Create Account</h2>
+    <input type="text" id="regName" placeholder="Full Name">
+    <input type="email" id="regEmail" placeholder="Email">
+    <input type="password" id="regPass" placeholder="Password">
+    <button class="btn reg-btn" onclick="handleRegister()">Register</button>
+    <p onclick="showSection('loginSection')" style="cursor:pointer; color: #aaa; text-align: center; margin-top: 15px;">Login here</p>
+</div>
+
+<div id="loginSection" class="glass-container active">
+    <h2>User Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button class="btn login-btn" onclick="handleLogin()">Login</button>
+    <p onclick="showSection('registerSection')" style="cursor:pointer; color: #aaa; text-align: center; margin-top: 15px;">Register here</p>
+</div>
+
+<div id="foodSection" class="glass-container">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    <h2 id="menuTitle">Food Delivery Application</h2>
+</div>
+
+<script>
+    function init3DEffect() {
+        const containers = document.querySelectorAll('.glass-container');
+        containers.forEach(container => {
+            if (container.id !== 'foodSection') {
+                container.addEventListener('mousemove', (e) => {
+                    let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                    let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                    container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                });
+                container.addEventListener('mouseleave', () => {
+                    container.style.transform = `rotateY(0deg) rotateX(5deg)`;
+                });
+            }
+        });
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('.glass-container').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if (id === 'foodSection') loadFoodCards();
+    }
+
+    function loadFoodCards() {
+        const foodListDiv = document.getElementById('foodSection');
+        const headerHTML = `<button class="logout-btn" onclick="logout()">Logout</button><h2 id="menuTitle">Food Delivery Application</h2>`;
+        foodListDiv.innerHTML = headerHTML;
+
+        const foodData = [
+            { id: 1, name: 'Paneer Tikka', description: 'Delicious spicy paneer', price: 250 },
+            { id: 2, name: 'Maharaja Veg Burger', description: 'Double patty with extra cheese', price: 180 },
+            { id: 3, name: 'Gulab Jamun', description: 'Soft mawa balls in syrup', price: 60 }
+        ];
+
+        foodData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'food-card';
+            card.innerHTML = `
+                <h3>${item.name}</h3>
+                <p class="description">${item.description}</p>
+                <p class="price-tag">₹${item.price}</p>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+                    <span class="qty-value">1</span>
+                    <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+                </div>
+                <button class="order-now-btn" onclick="confirmOrder('${item.name}')">Order Now</button>
+            `;
+
+            card.addEventListener('mousemove', (e) => {
+                let rect = card.getBoundingClientRect();
+                let x = (e.clientX - rect.left) - rect.width/2;
+                let y = (e.clientY - rect.top) - rect.height/2;
+                card.style.transform = `rotateY(${x/10}deg) rotateX(${-y/10}deg) translateZ(30px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `rotateY(0deg) rotateX(0deg) translateZ(0)`;
+            });
+            foodListDiv.appendChild(card);
+        });
+    }
+
+    function changeQty(btn, delta) {
+        const valueSpan = btn.parentElement.querySelector('.qty-value');
+        let currentQty = parseInt(valueSpan.innerText) + delta;
+        if (currentQty >= 1 && currentQty <= 10) valueSpan.innerText = currentQty;
+    }
+
+    function confirmOrder(itemName) {
+        alert(`${itemName} ordered successfully!`);
+    }
+
+    function handleLogin() {
+        document.getElementById('navBar').style.display = 'none';
+        showSection('foodSection');
+    }
+
+    function logout() {
+        location.reload();
+    }
+
+    window.onload = init3DEffect;
+</script>
+</body>
+</html>

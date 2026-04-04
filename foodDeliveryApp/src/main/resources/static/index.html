@@ -1,261 +1,485 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>FoodieApp - Immersive 3D Experience</title>-->
+<!--    <style>-->
+<!--        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');-->
+
+<!--        /* -&#45;&#45; Reset & Base Styles -&#45;&#45; */-->
+<!--        * { margin: 0; padding: 0; box-sizing: border-box; }-->
+<!--        body {-->
+<!--            font-family: 'Poppins', sans-serif;-->
+<!--            background: #0f172a; /* Deep Space Background */-->
+<!--            color: white;-->
+<!--            min-height: 100vh;-->
+<!--            overflow-x: hidden;-->
+<!--            perspective: 1500px; /* Crucial for 3D effect */-->
+<!--            display: flex; flex-direction: column;-->
+<!--        }-->
+
+<!--        /* -&#45;&#45; 3D Background Animation -&#45;&#45; */-->
+<!--        .bg-animate {-->
+<!--            position: fixed; top: 0; left: 0; width: 100%; height: 100%;-->
+<!--            z-index: -1;-->
+<!--            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);-->
+<!--        }-->
+
+<!--        /* Floating 3D Cubes */-->
+<!--        .cube {-->
+<!--            position: absolute; width: 20px; height: 20px;-->
+<!--            background: rgba(255, 255, 255, 0.1);-->
+<!--            border: 1px solid rgba(255, 255, 255, 0.2);-->
+<!--            animation: animate-cube 20s linear infinite;-->
+<!--        }-->
+<!--        .cube:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }-->
+<!--        .cube:nth-child(2) { top: 70%; left: 10%; animation-delay: 2s; background: rgba(59, 130, 246, 0.2); }-->
+<!--        .cube:nth-child(3) { top: 40%; left: 80%; animation-delay: 4s; background: rgba(236, 72, 153, 0.2); }-->
+<!--        .cube:nth-child(4) { top: 60%; left: 60%; animation-delay: 6s; }-->
+<!--        .cube:nth-child(5) { top: 80%; left: 80%; animation-delay: 8s; background: rgba(168, 85, 247, 0.2); }-->
+
+<!--        @keyframes animate-cube {-->
+<!--            0% { transform: scale(0) translateY(0) rotate(0deg); opacity: 1; }-->
+<!--            100% { transform: scale(1.5) translateY(-100px) rotate(360deg); opacity: 0; }-->
+<!--        }-->
+
+<!--        /* -&#45;&#45; Navigation -&#45;&#45; */-->
+<!--        nav {-->
+<!--            padding: 20px 50px; display: flex; justify-content: space-between; align-items: center;-->
+<!--            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);-->
+<!--            border-bottom: 1px solid rgba(255, 255, 255, 0.05);-->
+<!--        }-->
+<!--        .logo { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }-->
+<!--        nav .nav-links button {-->
+<!--            background: none; border: 1px solid rgba(255,255,255,0.2); color: white;-->
+<!--            padding: 10px 25px; border-radius: 30px; cursor: pointer; margin-left: 15px;-->
+<!--            transition: all 0.3s ease; font-weight: 500;-->
+<!--        }-->
+<!--        nav .nav-links button:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }-->
+
+<!--        /* -&#45;&#45; Glass Containers -&#45;&#45; */-->
+<!--        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px; }-->
+<!--        .glass-container {-->
+<!--            display: none; width: 100%; max-width: 480px;-->
+<!--            padding: 50px; border-radius: 24px;-->
+<!--            background: rgba(255, 255, 255, 0.05);-->
+<!--            border: 1px solid rgba(255, 255, 255, 0.1);-->
+<!--            backdrop-filter: blur(20px);-->
+<!--            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);-->
+<!--            transform-style: preserve-3d; /* Key for 3D inside */-->
+<!--            transition: transform 0.5s ease, opacity 0.5s ease;-->
+<!--        }-->
+<!--        .glass-container.active { display: block; animation: floatIn 0.8s ease-out; }-->
+
+<!--        @keyframes floatIn { 0% { opacity: 0; transform: translateY(50px) rotateX(-10deg); } 100% { opacity: 1; transform: translateY(0) rotateX(0deg); } }-->
+
+<!--        /* -&#45;&#45; Forms & Inputs -&#45;&#45; */-->
+<!--        .glass-container h2 { text-align: center; margin-bottom: 35px; font-weight: 700; letter-spacing: 1px; color: #f1f5f9; }-->
+<!--        .input-group { position: relative; margin-bottom: 20px; }-->
+<!--        input, textarea {-->
+<!--            width: 100%; padding: 16px 20px; border-radius: 14px;-->
+<!--            border: 1px solid rgba(255,255,255,0.1);-->
+<!--            background: rgba(255,255,255,0.03); color: white;-->
+<!--            font-family: inherit; font-size: 1rem;-->
+<!--            transition: 0.3s;-->
+<!--        }-->
+<!--        input:focus, textarea:focus { outline: none; border-color: #3b82f6; background: rgba(255,255,255,0.07); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }-->
+
+<!--        /* -&#45;&#45; Buttons -&#45;&#45; */-->
+<!--        .btn {-->
+<!--            width: 100%; padding: 18px; border: none; border-radius: 14px;-->
+<!--            cursor: pointer; font-weight: 600; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;-->
+<!--            transition: all 0.3s ease; transform: translateZ(20px); /* 3D Pop */-->
+<!--        }-->
+<!--        .reg-btn { background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); color: white; box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3); }-->
+<!--        .reg-btn:hover { box-shadow: 0 15px 30px rgba(34, 197, 94, 0.5); transform: translateZ(25px) translateY(-3px); }-->
+
+<!--        .login-btn { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }-->
+<!--        .login-btn:hover { box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5); transform: translateZ(25px) translateY(-3px); }-->
+
+<!--        /* -&#45;&#45; Food Section -&#45;&#45; */-->
+<!--        #foodSection.glass-container {-->
+<!--            max-width: 1200px; display: none; background: transparent; border: none; box-shadow: none; backdrop-filter: none;-->
+<!--            padding: 0; transform: none;-->
+<!--        }-->
+<!--        #foodSection.active { display: block; }-->
+<!--        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; padding: 20px 0; }-->
+<!--        .menu-title { text-align: center; font-size: 3rem; margin-bottom: 50px; background: linear-gradient(135deg, #f1f5f9, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }-->
+
+<!--        /* -&#45;&#45; Food Cards (Advanced 3D) -&#45;&#45; */-->
+<!--        .food-card {-->
+<!--            background: rgba(255, 255, 255, 0.03);-->
+<!--            border: 1px solid rgba(255, 255, 255, 0.08);-->
+<!--            border-radius: 30px; padding: 35px; text-align: center;-->
+<!--            transition: 0.5s ease; /* Smooth transition */-->
+<!--            transform-style: preserve-3d; /* Key for internal 3D */-->
+<!--            box-shadow: 0 15px 35px rgba(0,0,0,0.2);-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        /* Hover Effect: Tilt */-->
+<!--        .food-card:hover {-->
+<!--            background: rgba(255, 255, 255, 0.06);-->
+<!--            border-color: rgba(255, 255, 255, 0.2);-->
+<!--        }-->
+
+<!--        /* Pop-out Content */-->
+<!--        .food-card h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; transform: translateZ(50px); }-->
+<!--        .food-card p { color: #94a3b8; font-size: 1rem; margin-bottom: 20px; transform: translateZ(30px); }-->
+<!--        .food-card .price-tag {-->
+<!--            font-size: 2.2rem; font-weight: 700; color: #22c55e;-->
+<!--            margin-bottom: 25px; transform: translateZ(70px);-->
+<!--            text-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);-->
+<!--        }-->
+<!--        .order-btn {-->
+<!--            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);-->
+<!--            color: white; transform: translateZ(50px);-->
+<!--            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);-->
+<!--        }-->
+<!--        .order-btn:hover { box-shadow: 0 15px 30px rgba(236, 72, 153, 0.5); transform: translateZ(60px) translateY(-3px); }-->
+
+<!--        .logout-btn { background: #ef4444; color: white; border: none; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-weight: 600; position: absolute; top: -70px; right: 0; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="bg-animate">-->
+<!--    <div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div>-->
+<!--</div>-->
+
+<!--<nav id="navBar">-->
+<!--    <div class="logo">Foodie3D</div>-->
+<!--    <div class="nav-links">-->
+<!--        <button onclick="showSection('loginSection')">Login</button>-->
+<!--        <button onclick="showSection('registerSection')">Register</button>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--<div class="main-content">-->
+<!--    <div id="registerSection" class="glass-container">-->
+<!--        <h2>Create Account</h2>-->
+<!--        <div class="input-group"><input type="text" id="regName" placeholder="Full Name"></div>-->
+<!--        <div class="input-group"><input type="email" id="regEmail" placeholder="Email Address"></div>-->
+<!--        <div class="input-group"><input type="password" id="regPass" placeholder="Password"></div>-->
+<!--        <div class="input-group"><textarea id="regAddress" placeholder="Delivery Address" rows="3"></textarea></div>-->
+<!--        <button class="btn reg-btn" onclick="handleRegister()">Sign Up</button>-->
+<!--    </div>-->
+
+<!--    <div id="loginSection" class="glass-container active">-->
+<!--        <h2>Welcome Back</h2>-->
+<!--        <div class="input-group"><input type="email" id="loginEmail" placeholder="Email Address"></div>-->
+<!--        <div class="input-group"><input type="password" id="loginPass" placeholder="Password"></div>-->
+<!--        <button class="btn login-btn" onclick="handleLogin()">Login</button>-->
+<!--    </div>-->
+
+<!--    <div id="foodSection" class="glass-container">-->
+<!--        <div style="position: relative;">-->
+<!--            <button class="logout-btn" onclick="location.reload()">Logout</button>-->
+<!--            <h1 class="menu-title">Explore Flavors</h1>-->
+<!--            <div id="menuGrid" class="menu-grid">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    const API_BASE_URL = "http://localhost:8081"; // Your backend port-->
+
+<!--    // -&#45;&#45; FUNCTIONALITY (Connected to Backend) -&#45;&#45;-->
+
+<!--    // 1. REGISTER-->
+<!--    async function handleRegister() {-->
+<!--        const userData = {-->
+<!--            name: document.getElementById('regName').value,-->
+<!--            email: document.getElementById('regEmail').value,-->
+<!--            password: document.getElementById('regPass').value,-->
+<!--            address: document.getElementById('regAddress').value-->
+<!--        };-->
+
+<!--        try {-->
+<!--            const response = await fetch(`${API_BASE_URL}/register`, {-->
+<!--                method: 'POST',-->
+<!--                headers: { 'Content-Type': 'application/json' },-->
+<!--                body: JSON.stringify(userData)-->
+<!--            });-->
+
+<!--            if (response.ok) { alert("Success! Please Login."); showSection('loginSection'); }-->
+<!--            else { alert("Registration Failed!"); }-->
+<!--        } catch (error) { console.error("Error:", error); alert("Backend not connected!"); }-->
+<!--    }-->
+
+<!--    // 2. LOGIN (Switch section)-->
+<!--    function handleLogin() {-->
+<!--        document.getElementById('navBar').style.display = 'none';-->
+<!--        showSection('foodSection');-->
+<!--    }-->
+
+<!--    // 3. LOAD MENU (Fetches from Postman added data)-->
+<!--    async function loadMenu() {-->
+<!--        const grid = document.getElementById('menuGrid');-->
+<!--        grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Loading menu...</p>';-->
+
+<!--        try {-->
+<!--            const response = await fetch(`${API_BASE_URL}/foods`);-->
+<!--            const foodData = await response.json();-->
+<!--            grid.innerHTML = ''; // Clear loading message-->
+
+<!--            if(foodData.length === 0) {-->
+<!--                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color: #94a3b8;">No food items yet. Add some via Postman!</p>';-->
+<!--                return;-->
+<!--            }-->
+
+<!--            foodData.forEach(item => {-->
+<!--                const card = document.createElement('div');-->
+<!--                card.className = 'food-card';-->
+<!--                card.innerHTML = `-->
+<!--                    <h3>${item.name}</h3>-->
+<!--                    <p>${item.description || item.desc || 'Fresh & Delicious'}</p>-->
+<!--                    <div class="price-tag">₹${item.price}</div>-->
+<!--                    <button class="btn order-btn" onclick="placeOrder('${item.name}', ${item.price})">Order</button>-->
+<!--                `;-->
+<!--                grid.appendChild(card);-->
+<!--                add3DEffectToCard(card); // Apply dynamic 3D tilt-->
+<!--            });-->
+<!--        } catch (error) {-->
+<!--            grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; color: #ef4444;">Error: Cannot connect to backend.</p>`;-->
+<!--        }-->
+<!--    }-->
+
+<!--    // -&#45;&#45; 3D INTERACTION LOGIC -&#45;&#45;-->
+
+<!--    // Dynamic Tilt on Mouse Move-->
+<!--    function add3DEffectToCard(card) {-->
+<!--        card.addEventListener('mousemove', (e) => {-->
+<!--            const rect = card.getBoundingClientRect();-->
+<!--            const x = e.clientX - rect.left; //x position within the element.-->
+<!--            const y = e.clientY - rect.top;  //y position within the element.-->
+<!--            const centerX = rect.width / 2;-->
+<!--            const centerY = rect.height / 2;-->
+
+<!--            // Calculate rotation values (-15deg to 15deg)-->
+<!--            const rotateX = -(y - centerY) / 10;-->
+<!--            const rotateY = (x - centerX) / 10;-->
+
+<!--            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;-->
+<!--        });-->
+
+<!--        // Reset on Mouse Leave-->
+<!--        card.addEventListener('mouseleave', () => {-->
+<!--            card.style.transform = `rotateX(0deg) rotateY(0deg)`;-->
+<!--        });-->
+<!--    }-->
+
+<!--    // -&#45;&#45; UI LOGIC -&#45;&#45;-->
+<!--    function showSection(id) {-->
+<!--        document.querySelectorAll('.glass-container').forEach(c => c.classList.remove('active'));-->
+<!--        document.getElementById(id).classList.add('active');-->
+<!--        if(id === 'foodSection') loadMenu();-->
+<!--    }-->
+
+<!--    function placeOrder(name, price) {-->
+<!--        alert(`Ordering ${name} for ₹${price}.\nIt will be delivered to your address.`);-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodieApp - 3D Experience</title>
+    <title>FoodieApp 3D - Live Backend</title>
     <style>
-        /* --- General 3D Setup --- */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(circle at center, #2c3e50 0%, #000000 100%);
-            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: white;
             min-height: 100vh;
-            perspective: 1500px;
+            overflow-x: hidden;
+            perspective: 1000px;
         }
 
-        /* Animated 3D Particles Background */
-        body::before {
-            content: '';
-            position: fixed;
-            width: 100%; height: 100%;
-            top: 0; left: 0;
-            background-image:
-                    radial-gradient(#fff, rgba(255,255,255,0.2) 2px, transparent 40px),
-                    radial-gradient(#fff, rgba(255,255,255,0.15) 1px, transparent 30px);
-            background-size: 550px 550px, 350px 350px;
-            animation: move-particles 100s linear infinite;
+        /* Moving Neon Background */
+        .neon-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, rgba(59,130,246,0.05) 25%, transparent 25%),
+            linear-gradient(-45deg, rgba(236,72,153,0.05) 25%, transparent 25%);
+            background-size: 60px 60px;
             z-index: -1;
-            opacity: 0.2;
+            animation: move-bg 10s linear infinite;
         }
+        @keyframes move-bg { from { background-position: 0 0; } to { background-position: 60px 60px; } }
 
-        @keyframes move-particles {
-            from { background-position: 0 0, 40px 60px; }
-            to { background-position: -5000px 10000px, -2000px 5000px; }
+        /* Navigation */
+        nav {
+            padding: 20px 10%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.02); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
+        .logo { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.5rem; color: #3b82f6; text-shadow: 0 0 10px #3b82f6; }
 
-        /* --- Glassmorphism and 3D Containers --- */
-        .glass-container {
-            display: none;
-            max-width: 450px;
-            margin: 12vh auto; /* Center alignment */
-            padding: 40px;
-            border-radius: 20px;
+        /* Containers */
+        .container {
+            display: none; width: 100%; max-width: 450px; margin: 100px auto;
+            padding: 40px; border-radius: 30px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(25px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             transform-style: preserve-3d;
-            transform: rotateX(5deg);
-            transition: transform 0.3s ease;
+            animation: float-up 0.6s ease-out;
         }
+        .active { display: block; }
+        @keyframes float-up { from { opacity: 0; transform: translateY(30px) rotateX(-5deg); } to { opacity: 1; transform: translateY(0); } }
 
-        .active { display: block; animation: float-in 0.8s ease-out; }
-
-        @keyframes float-in {
-            0% { transform: translateY(50px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+        /* Inputs & Buttons */
+        input, textarea {
+            width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;
         }
-
-        /* --- Food Menu Section Fixes --- */
-        #foodSection.glass-container {
-            max-width: 1100px;
-            margin: 5vh auto;
-            padding: 60px 30px; /* Padding for internal breathing space */
-            background: rgba(255, 255, 255, 0.02);
-            display: none; /* Reset for JS */
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            position: relative;
-            border: none;
-            box-shadow: none;
-            backdrop-filter: none;
-        }
-
-        #foodSection.active { display: grid; }
-
-        #menuTitle {
-            grid-column: 1 / -1;
-            text-align: center;
-            font-size: 3em;
-            color: white;
-            margin-bottom: 50px; /* Gap below title */
-            margin-top: 20px;    /* Gap from top */
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transform: translateZ(60px);
-            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        /* --- Food Card 3D Styling --- */
-        .food-card {
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: transform 0.5s ease;
-            transform-style: preserve-3d;
-        }
-
-        .food-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .food-card h3 { font-size: 1.8em; transform: translateZ(40px); margin-bottom: 10px; }
-        .food-card p.description { color: #ccc; transform: translateZ(30px); }
-        .price-tag { color: #2ecc71; font-size: 1.6em; font-weight: bold; transform: translateZ(50px); margin: 20px 0; }
-
-        /* --- Buttons & Inputs --- */
-        input {
-            width: 90%; padding: 15px; margin: 10px 0; border-radius: 12px;
-            border: none; background: rgba(255,255,255,0.1); color: white;
-        }
-
         .btn {
-            width: 100%; padding: 18px; cursor: pointer; border-radius: 12px;
-            border: none; color: white; font-weight: bold; text-transform: uppercase;
-            transition: 0.3s; transform: translateZ(20px);
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
+            font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 20px;
+            text-transform: uppercase; letter-spacing: 1px;
         }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .btn:hover { transform: scale(1.05) translateZ(20px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
-        .login-btn { background: linear-gradient(135deg, #007bff, #0056b3); }
-        .reg-btn { background: linear-gradient(135deg, #28a745, #1e7e34); }
+        /* Menu Section */
+        #menuSection.container { max-width: 1100px; background: transparent; border: none; box-shadow: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 
-        .order-now-btn {
-            background: linear-gradient(135deg, #ffc107, #e0a800);
-            color: black; padding: 15px; font-weight: bold; border-radius: 10px;
-            border: none; cursor: pointer; width: 100%; transform: translateZ(30px);
+        /* 3D Food Card */
+        .card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px; padding: 30px; text-align: center;
+            transition: transform 0.1s ease; transform-style: preserve-3d;
         }
-
-        .logout-btn {
-            position: absolute; top: 20px; right: 30px;
-            background: #dc3545; color: white; border: none;
-            padding: 10px 20px; border-radius: 8px; cursor: pointer;
-            z-index: 100;
-        }
-
-        .quantity-controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .qty-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
-
-        nav { text-align: center; padding: 20px; }
-        nav button { background: none; border: 1px solid #555; color: white; padding: 10px 25px; border-radius: 25px; cursor: pointer; margin: 0 10px; }
-
+        .card h3 { font-size: 1.5rem; transform: translateZ(50px); color: #60a5fa; }
+        .card p { color: #94a3b8; transform: translateZ(30px); margin: 10px 0; }
+        .card .price { font-size: 1.8rem; font-weight: 700; color: #10b981; transform: translateZ(40px); }
+        .order-btn { background: #f59e0b; color: white; transform: translateZ(60px); }
     </style>
 </head>
 <body>
 
-<nav id="navBar">
-    <button onclick="showSection('loginSection')">Login</button>
-    <button onclick="showSection('registerSection')">Register</button>
+<div class="neon-bg"></div>
+
+<nav id="topNav">
+    <div class="logo">FOODIE_VIBE</div>
+    <div id="navLinks">
+        <button class="btn" style="width: auto; padding: 10px 20px;" onclick="showSection('loginBox')">Login</button>
+    </div>
 </nav>
 
-<div id="registerSection" class="glass-container">
-    <h2>Create Account</h2>
+<div id="regBox" class="container">
+    <h2 style="text-align:center; margin-bottom:20px;">Join the Vibe</h2>
     <input type="text" id="regName" placeholder="Full Name">
-    <input type="email" id="regEmail" placeholder="Email">
-    <input type="password" id="regPass" placeholder="Password">
-    <button class="btn reg-btn" onclick="handleRegister()">Register</button>
-    <p onclick="showSection('loginSection')" style="cursor:pointer; color: #aaa; text-align: center; margin-top: 15px;">Login here</p>
+    <input type="email" id="regEmail" placeholder="Email Address">
+    <input type="password" id="regPass" placeholder="Password (Min 6)">
+    <textarea id="regAddr" placeholder="Delivery Address"></textarea>
+    <button class="btn btn-success" onclick="doRegister()">Sign Up</button>
+    <p style="text-align:center; margin-top:15px; cursor:pointer;" onclick="showSection('loginBox')">Already a member? Login</p>
 </div>
 
-<div id="loginSection" class="glass-container active">
-    <h2>User Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email">
-    <input type="password" id="loginPass" placeholder="Password">
-    <button class="btn login-btn" onclick="handleLogin()">Login</button>
-    <p onclick="showSection('registerSection')" style="cursor:pointer; color: #aaa; text-align: center; margin-top: 15px;">Register here</p>
+<div id="loginBox" class="container active">
+    <h2 style="text-align:center; margin-bottom:20px;">Welcome Back</h2>
+    <input type="email" id="logEmail" placeholder="Email">
+    <input type="password" id="logPass" placeholder="Password">
+    <button class="btn btn-primary" onclick="doLogin()">Enter App</button>
+    <p style="text-align:center; margin-top:15px; cursor:pointer;" onclick="showSection('regBox')">New here? Register</p>
 </div>
 
-<div id="foodSection" class="glass-container">
-    <button class="logout-btn" onclick="logout()">Logout</button>
-    <h2 id="menuTitle">Food Delivery Application</h2>
+<div id="menuSection" class="container">
+    <h1 style="text-align:center; margin-bottom:40px; font-family:'Orbitron';">LIVE MENU</h1>
+    <div id="foodGrid" class="grid"></div>
 </div>
 
 <script>
-    function init3DEffect() {
-        const containers = document.querySelectorAll('.glass-container');
-        containers.forEach(container => {
-            if (container.id !== 'foodSection') {
-                container.addEventListener('mousemove', (e) => {
-                    let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-                    let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-                    container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    const API = "http://localhost:8081/api"; // Updated Port
+
+    // 1. REGISTER [cite: 13, 21, 54]
+    async function doRegister() {
+        const user = {
+            name: document.getElementById('regName').value,
+            email: document.getElementById('regEmail').value,
+            password: document.getElementById('regPass').value,
+            address: document.getElementById('regAddr').value
+        };
+        try {
+            const res = await fetch(`${API}/users/register`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(user)
+            });
+            const msg = await res.text();
+            alert(msg);
+            if(res.ok) showSection('loginBox');
+        } catch(e) { alert("Backend Dead!"); }
+    }
+
+    // 2. LOGIN [cite: 14, 55, 57]
+    async function doLogin() {
+        const user = {
+            email: document.getElementById('logEmail').value,
+            password: document.getElementById('logPass').value
+        };
+        try {
+            const res = await fetch(`${API}/users/login`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(user)
+            });
+            const msg = await res.text();
+            if(msg.includes("Successfully")) {
+                document.getElementById('topNav').style.display = 'none';
+                showSection('menuSection');
+            } else { alert(msg); }
+        } catch(e) { alert("Check Connection!"); }
+    }
+
+    // 3. LOAD MENU [cite: 6, 23, 45]
+    async function loadMenu() {
+        const grid = document.getElementById('foodGrid');
+        grid.innerHTML = '<p>Syncing items...</p>';
+        try {
+            const res = await fetch(`${API}/fooditem`);
+            const items = await res.json();
+            grid.innerHTML = '';
+            items.forEach(it => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${it.name}</h3>
+                    <p>${it.description}</p>
+                    <div class="price">₹${it.price}</div>
+                    <button class="btn order-btn" onclick="orderNow(${it.id})">ORDER NOW</button>
+                `;
+                // Add 3D Mouse Tilt
+                card.addEventListener('mousemove', (e) => {
+                    let ax = (window.innerWidth/2 - e.pageX)/20;
+                    let ay = (window.innerHeight/2 - e.pageY)/20;
+                    card.style.transform = `rotateY(${ax}deg) rotateX(${ay}deg)`;
                 });
-                container.addEventListener('mouseleave', () => {
-                    container.style.transform = `rotateY(0deg) rotateX(5deg)`;
-                });
-            }
-        });
+                card.addEventListener('mouseleave', () => card.style.transform = `rotate(0)`);
+                grid.appendChild(card);
+            });
+        } catch(e) { grid.innerHTML = '<p style="color:red;">Error loading items!</p>'; }
     }
 
     function showSection(id) {
-        document.querySelectorAll('.glass-container').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if (id === 'foodSection') loadFoodCards();
+        if(id === 'menuSection') loadMenu();
     }
 
-    function loadFoodCards() {
-        const foodListDiv = document.getElementById('foodSection');
-        const headerHTML = `<button class="logout-btn" onclick="logout()">Logout</button><h2 id="menuTitle">Food Delivery Application</h2>`;
-        foodListDiv.innerHTML = headerHTML;
-
-        const foodData = [
-            { id: 1, name: 'Paneer Tikka', description: 'Delicious spicy paneer', price: 250 },
-            { id: 2, name: 'Maharaja Veg Burger', description: 'Double patty with extra cheese', price: 180 },
-            { id: 3, name: 'Gulab Jamun', description: 'Soft mawa balls in syrup', price: 60 }
-        ];
-
-        foodData.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'food-card';
-            card.innerHTML = `
-                <h3>${item.name}</h3>
-                <p class="description">${item.description}</p>
-                <p class="price-tag">₹${item.price}</p>
-                <div class="quantity-controls">
-                    <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
-                    <span class="qty-value">1</span>
-                    <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
-                </div>
-                <button class="order-now-btn" onclick="confirmOrder('${item.name}')">Order Now</button>
-            `;
-
-            card.addEventListener('mousemove', (e) => {
-                let rect = card.getBoundingClientRect();
-                let x = (e.clientX - rect.left) - rect.width/2;
-                let y = (e.clientY - rect.top) - rect.height/2;
-                card.style.transform = `rotateY(${x/10}deg) rotateX(${-y/10}deg) translateZ(30px)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `rotateY(0deg) rotateX(0deg) translateZ(0)`;
-            });
-            foodListDiv.appendChild(card);
-        });
-    }
-
-    function changeQty(btn, delta) {
-        const valueSpan = btn.parentElement.querySelector('.qty-value');
-        let currentQty = parseInt(valueSpan.innerText) + delta;
-        if (currentQty >= 1 && currentQty <= 10) valueSpan.innerText = currentQty;
-    }
-
-    function confirmOrder(itemName) {
-        alert(`${itemName} ordered successfully!`);
-    }
-
-    function handleLogin() {
-        document.getElementById('navBar').style.display = 'none';
-        showSection('foodSection');
-    }
-
-    function logout() {
-        location.reload();
-    }
-
-    window.onload = init3DEffect;
+    function orderNow(id) { alert("Order request sent for Item ID: " + id); }
 </script>
 </body>
 </html>

@@ -7,7 +7,7 @@ import com.example.foodDeliveryApp.service.FoodItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/fooditem")
 public class FoodItemController {

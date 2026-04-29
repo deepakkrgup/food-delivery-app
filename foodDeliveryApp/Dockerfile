@@ -1,8 +1,16 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-COPY . .
-RUN mvn clean package -DskipTests
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+COPY mvnw.cmd .
+RUN chmod +x mvnw
+
+RUN ./mvnw dependency:go-offline
+
+COPY src src
+RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
